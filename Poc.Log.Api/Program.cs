@@ -10,22 +10,7 @@ namespace Poc.Log.Api
     {
         public static void Main(string[] args)
         {
-            var logger = NLogBuilder.ConfigureNLog("nlog.config").GetCurrentClassLogger();
-
-            try
-            {
-                logger.Debug("Serviço de log iniciado");
-                CreateHostBuilder(args).Build().Run();
-            }
-            catch (Exception e)
-            {
-                logger.Error(e, "Ocorreu algum erro no serviço de log");
-                throw;
-            }
-            finally
-            {
-                NLog.LogManager.Shutdown();
-            }
+            CreateHostBuilder(args).Build().Run();
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>

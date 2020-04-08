@@ -10,7 +10,6 @@
     <PackageReference Include="NLog.Mongo" Version="4.6.0.86" />
     <PackageReference Include="NLog.Web.AspNetCore" Version="4.9.1" />
     <PackageReference Include="NLog.WindowsIdentity" Version="4.7.0" />
-    <Content Update="nlog.config" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
 

@@ -1,5 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using NLog.Mongo;
+using NLog.Web;
+using System.Collections.Generic;
 
 namespace Poc.Log.Api.Controllers
 {
@@ -12,12 +15,24 @@ namespace Poc.Log.Api.Controllers
         public LogController(ILogger<LogController> logger)
         {
             _logger = logger;
-            _logger.LogDebug("NLog injetado no LogController");
-            _logger.Log()
         }
 
-        public void Post()
+        [HttpGet]
+        public void Get()
         {
+            //var mongoTarget = new MongoTarget()
+            //{ 
+            //    Name = "mongo3",
+            //    DatabaseName = "TestLog",
+            //    CollectionName = "Logs",
+            //    ConnectionString = "mongodb://localhost:27017"
+            //};
+
+            //var config = new NLog.Config.LoggingConfiguration();
+            //config.AddRule(NLog.LogLevel.Info, NLog.LogLevel.Fatal, mongoTarget);
+            //NLog.LogManager.Configuration = config;
+
+            NLogBuilder.ConfigureNLog("nlog/quitaqui.config").GetCurrentClassLogger();
             _logger.LogInformation("test log");
         }
     }
