@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using NLog.Mongo;
 using NLog.Web;
-using System.Collections.Generic;
+using Poc.Log.Api.Domain.Log.Request;
+using Poc.Log.Api.Domain.Log.Response;
+using System;
 
 namespace Poc.Log.Api.Controllers
 {
@@ -10,30 +10,24 @@ namespace Poc.Log.Api.Controllers
     [ApiController]
     public class LogController : Controller
     {
-        private readonly ILogger<LogController> _logger;
-
-        public LogController(ILogger<LogController> logger)
+        [HttpPost]
+        public IActionResult Post([FromBody]LogPostRequest objLog)
         {
-            _logger = logger;
-        }
+            try
+            {
+                if (string.IsNullOrEmpty(objLog.System) || objLog.ObjectSystem == null)
+                    return BadRequest(new LogPostResponse(400, "Bad Request", "Parametro(s) da requisicao invalido(s)."));
 
-        [HttpGet]
-        public void Get()
-        {
-            //var mongoTarget = new MongoTarget()
-            //{ 
-            //    Name = "mongo3",
-            //    DatabaseName = "TestLog",
-            //    CollectionName = "Logs",
-            //    ConnectionString = "mongodb://localhost:27017"
-            //};
+                NLogBuilder.ConfigureNLog($"nlog/{objLog.System}.config")
+                                        .GetCurrentClassLogger()
+                                        .Log(objLog.ObjectSystem);
 
-            //var config = new NLog.Config.LoggingConfiguration();
-            //config.AddRule(NLog.LogLevel.Info, NLog.LogLevel.Fatal, mongoTarget);
-            //NLog.LogManager.Configuration = config;
-
-            NLogBuilder.ConfigureNLog("nlog/quitaqui.config").GetCurrentClassLogger();
-            _logger.LogInformation("test log");
+                return Ok(new LogPostResponse(200, "OK", "Log gravado com sucesso"));
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, new LogPostResponse(500, "Server Error", $"Erro ao gravar o log: ${e.Message}"));
+            }
         }
     }
 }
