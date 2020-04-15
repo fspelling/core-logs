@@ -15,6 +15,8 @@ namespace Poc.Log.Api.Controllers
         {
             try
             {
+                //objLog.ObjectSystem = Utils.GenarateLogEventInfo.CreateObjectLog(Utils.ENUMLogType.Error, "qualquer coisa", 50, DateTime.Now, DateTime.Now, 222);
+
                 if (string.IsNullOrEmpty(objLog.System) || objLog.ObjectSystem == null)
                     return BadRequest(new LogPostResponse(400, "Bad Request", "Parametro(s) da requisicao invalido(s)."));
 
